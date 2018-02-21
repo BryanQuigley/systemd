@@ -346,8 +346,9 @@ static void test_path_join(void) {
 static void test_fsck_exists(void) {
         log_info("/* %s */", __func__);
 
-        /* Ensure we use a sane default for PATH. */
-        assert_se(unsetenv("PATH") == 0);
+        /* The build environment might not use the same split-usr approach
+         * as the current build, so lets use the most inclusive PATH. */
+        assert_se(setenv("PATH", DEFAULT_PATH_SPLIT_USR, 1) >= 0);
 
         /* fsck.minix is provided by util-linux and will probably exist. */
         assert_se(fsck_exists("minix") == 1);
